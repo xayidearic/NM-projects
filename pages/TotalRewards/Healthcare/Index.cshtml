@@ -1,0 +1,76 @@
+@using EPiServer.Web.Mvc.Html
+@using NMIC02_DC.Features.Blocks.TrSectionBlock;
+@using NMIC02_DC.Features.Pages.TotalRewards.HealthCare;
+
+@model NMIC02_DC.Features.Pages.TotalRewards.HealthCare.TrHealthCarePageViewModel;
+
+<div class="container-fluid">
+    @await Html.PartialAsync("~/Features/Blocks/HeroBlock/HeroBlock.cshtml", Model.Hero)
+</div>
+
+<total-rewards-hc-alert-banner></total-rewards-hc-alert-banner>
+
+<div id="main-content" class="total-rewards total-rewards--healthcare-page container">
+    <div class="row w-100 mx-0">
+
+        <div class="total-rewards__sidebar col-12 col-md-4 col-lg-3 ps-0">
+            @await Component.InvokeAsync("Subnav", Model.CurrentContent)
+        </div>
+
+        <div class="health-care col-12 col-md-8 col-lg-9 px-0">
+            <!-- Campaign Banner --> 
+            @if (Model.CurrentContent.CampaignBanner != null)
+            {                    
+                <div id="campaignBannerHalfWidth">@Html.PropertyFor(x => x.CurrentContent.CampaignBanner)</div>
+            }
+
+            <div class="total-rewards__content-wrapper col-12">
+                <div class="mb-8">
+                    <div class="d-lg-flex align-items-center justify-content-between">
+                        <total-rewards-header 
+                            header-icon="@Model.PageHeaderImage"
+                            header-title="@Model.CurrentContent.PageHeader">
+                        </total-rewards-header>
+                        <total-rewards-health-blur-toggle cookie-name="hideHCData"></total-rewards-health-blur-toggle>
+                    </div>
+                    <h1 class="color-primary mt-0 mb-0 mt-4 d-none d-lg-block">@Model.CurrentContent.PageHeader</h1>
+                </div>
+
+                @* TinyMCE content *@
+                <div>@Html.PropertyFor(m => m.CurrentContent.MainBody)</div>
+
+                @* QuickLink Title *@
+                <div class="health-care__quick-links-title mb-2"> @Html.PropertyFor(m =>
+                    m.CurrentContent.QuickLinkTitle)</div>
+
+                @* QuickLink SubTitle *@
+                <h2 class="mb-2 mt-0 color-primary">@Html.PropertyFor(m => m.CurrentContent.QuickLinkSubTitle)</h2>
+
+                @* QuickLink Content Area*@
+                <div class="quick-links-block">@Html.PropertyFor(m => m.CurrentContent.QuickLinkContentArea)</div>
+
+                @* Dynamic Content *@
+                <section>
+                    <health-plan-card-list></health-plan-card-list>
+                </section>
+
+                @* TR Section Block *@
+                <div>@Html.PropertyFor(m => m.CurrentContent.MainContent)</div>
+
+            </div>
+
+            @if (Model.CurrentContent.Contacts != null)
+            {
+                <section class="total-rewards__contact-block mt-8 mt-lg-10">
+                    <div class="contact-block">
+                        <h2 class="mb-3">Contact</h2>
+                        <div class="contact-block__content-container py-2 px-8 mb-8">
+                            @Html.PropertyFor(x => x.CurrentContent.Contacts)
+                        </div>
+                    </div>
+                </section>
+            }
+
+        </div>
+    </div>
+</div>

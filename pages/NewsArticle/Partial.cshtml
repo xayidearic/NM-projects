@@ -1,0 +1,58 @@
+﻿@using EPiServer.Web.Mvc.Html
+@using NMIC02_DC.Features.Pages.NewsArticle
+@using EPiServer.Find.Helpers.Text
+@using NMIC02_DC.Features.Services.News
+
+@model NewsArticleSearchResult
+
+<a class="hover text-decoration-none news-article-partial" href="@Url.ContentUrl(Model.ContentLink)">
+    <div class="bg-white">
+        <!--BEGIN news image-->
+        @if (!ContentReference.IsNullOrEmpty(Model.ThumbnailImage))
+        {
+            <div class="news-article-partial__image">
+                <img src="@Url.ContentUrl(Model.ThumbnailImage)" class="img-fluid w-100" alt="news image" />
+            </div>
+        }
+
+        <div class="news-article-partial__content d-flex flex-column">
+            <div class="news-article-partial__tag text-decoration-none d-none d-lg-block">
+                <p class="news-article-partial__category eyebrow">@Model.CategoryName</p>
+            </div>
+
+            <div class="news-article-partial__title d-none d-lg-block">
+                <h3 class="truncated-text text-decoration-none">
+                    @Model.Title
+                </h3>
+            </div>
+
+            <div class="news-article-partial__title d-block d-lg-none">
+                <h4 class="truncated-text text-decoration-none">
+                    @Model.Title
+                </h4>
+            </div>
+
+            <div class="news-article-partial__summary text-secondary d-none d-lg-block">
+                @if (!string.IsNullOrWhiteSpace(Model.Summary))
+                {
+                    <p class="p2 truncated-text">@Model.Summary</p>
+                }
+            </div>
+
+            <div class="text-secondary d-none d-lg-flex align-items-center">
+                <p class="news-article-partial__date metadata">@Convert.ToDateTime(Model.Published).ToString("MMM dd, yyyy")</p>
+                <div>
+                    @if (Model.IsLeaderNews)
+                    {
+                        <div class="news-article-partial__leader-news metadata d-flex justify-content-center">
+                            <span>|</span>
+                            <img class="icon--xs me-2" src="~/Content/Images/icons/star_gold_icon.svg" alt="Gold star icon" />
+                            <span class="brand__blue-enabled weight-500">Leader News</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</a>

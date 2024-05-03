@@ -1,0 +1,73 @@
+@using EPiServer.Core
+@using EPiServer.Web.Mvc.Html
+@using NMIC02_DC.Features.Shared.Static;
+@using NMIC02_DC.Features.Pages.NewsArticle
+@using NMIC02_DC.Infrastructure.Extensions
+
+@model NewsArticlePageViewModel
+
+<!--BEGIN top banner-->
+@if (Model.CurrentContent.TopContentBlock != null)
+{
+    <div class="row gx-0">
+        <div class="col-12 px-0">
+            @Html.PropertyFor(m => m.CurrentContent.TopContentBlock)
+        </div>
+    </div>
+
+}
+<!--CLOSE top banner-->
+
+<div id="main-content" class="news-article container mb-3">
+    <!--BEGIN news image-->
+    @if (!ContentReference.IsNullOrEmpty(Model.CurrentContent.BannerImage))
+    {
+        <div class="row">
+            <div class="news-article__news-img col-12 col-md-10 col-lg-12 mx-auto px-lg-0 px-xl-2">
+                <img src="@Url.ContentUrl(Model.CurrentContent.BannerImage)" class="d-block img-fluid w-100"
+                    alt="news image" />
+            </div>
+        </div>
+    }
+    <!--CLOSE news image-->
+    <!--BEGIN main content-->
+    <div class="row">
+        <div class="col-12 col-md-10 col-lg-12 mx-auto">
+            <div class="news-article__content-block hover bg-white text-secondary p1">
+                @Html.PropertyFor(m => m.CurrentContent.MainBody)
+
+                <div class="section-divider section-divider--gray w-100 my-5"></div>
+
+                <div class="news-article__comments-quick-info d-flex justify-content-between">
+                    <div class="d-flex align-items-center cursor-pointer">
+                        <span class="metadata brand__blue-enabled me-4 fw-light">Category</span>
+
+                        <span class="pl-2 metadata brand__blue-enabled me-4 fw-light">@string.Join(", ",
+                            Model.Categories)</span>
+                    </div>
+                </div>
+
+                <div class="section-divider section-divider--gray w-100 my-5"></div>
+
+                <dc-comments-quick-info page-id="@Model.CurrentContent.ContentGuid"
+                    like-count=@Model.Rating.LikesCountValue liked=@Model.Rating.LikedByCurrentUser>
+                </dc-comments-quick-info>
+            </div>
+        </div>
+        <div class="col-12 col-md-10 col-lg-12 mx-auto px-0">
+            <section class="mini-news-feed">
+                @Html.PropertyFor(x => x.CurrentContent.MiniNewsFeedContentArea)
+            </section>
+        </div>
+    </div>
+    <!--CLOSE main content-->
+</div>
+<!--BEGIN bottom banner-->
+@Html.PropertyFor(m => m.CurrentContent.BottomContent)
+
+@* Comments Modal *@
+<div id="commentsModal" data-lwsearch="exclude">
+    <dc-comments-feature page-id="@Model.CurrentContent.ContentGuid"
+        page-title="@Model.CurrentContent.Title"></dc-comments-feature>
+</div>
+<dc-linked-comment-modal></dc-linked-comment-modal>

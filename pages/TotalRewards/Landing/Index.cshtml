@@ -1,0 +1,78 @@
+@using EPiServer.Web.Mvc.Html
+@using NMIC02_DC.Features.Blocks.BenefitCardBlock;
+@using NMIC02_DC.Features.Blocks.TrLandingPageSectionBlock;
+@using NMIC02_DC.Features.Blocks.RelatedNewsContentBlock;
+@using System.Text.Json
+@using System.Web
+
+@model NMIC02_DC.Features.Pages.TotalRewards.Landing.TrLandingPageViewModel
+
+
+<div class="container-fluid">
+    @await Html.PartialAsync("~/Features/Blocks/HeroBlock/HeroBlock.cshtml", Model.Hero)
+</div>
+<total-rewards-dashboard-alert-banner></total-rewards-dashboard-alert-banner>
+@await Component.InvokeAsync("PageNav", Model.CurrentContent)
+
+<!-- Campaign Banner --> 
+@if (Model.CurrentContent.CampaignBanner != null)
+{                    
+    <div class="total-rewards">
+        <div id="campaignBannerFullWidth" class="p-0 campaign-banner--tr-landing-page">@Html.PropertyFor(x => x.CurrentContent.CampaignBanner)</div>
+    </div>
+}
+
+<div id="main-content" class="total-rewards total-rewards--dashboard container">
+    <div class="row w-100 mx-0">
+        <div class="col-12 px-0">
+            <div class="total-rewards__content-wrapper total-rewards__content-wrapper--no-bg col-12 px-0 pb-0">
+                <total-rewards-dashboard-graph-section slide-content="@Model.DashboardSections"></total-rewards-dashboard-graph-section>
+                
+                @* BenefitCard Blocks *@
+                @if (Model.AvailableBenefits != null)
+                {
+                    <div class="available-benefits position-relative swiper swiper--inline">
+                        <div class="d-flex align-items-center mt-8 mb-2">
+                            <h1 class="color-primary my-0">@Html.PropertyFor(m => m.CurrentContent.AvailableBenefitsTitle)</h1>
+                                <div class="d-flex ms-2">
+                                    <div class="swiper-button-prev-1 swiper-left-arrow">
+                                        <img src="/Content/Images/icons/total-rewards/chevron-right_bold.svg"
+                                            alt="">
+                                    </div>
+                                    <div class="swiper-button-next-1 swiper-right-arrow">
+                                        <img src="/Content/Images/icons/total-rewards/chevron-right_bold.svg"
+                                        alt="">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="swiper-container-1">
+                                <div class="swiper-wrapper">
+                            
+                                    @foreach (var benefit in Model.AvailableBenefits)
+                                    {
+                                        <div class="swiper-slide">
+                                            @Html.PropertyFor(_ => benefit)
+                                        </div>
+                                    }
+                            
+                                </div>
+                            </div>
+                    </div>
+                }
+
+                @* RelatedNewsArticleTile *@
+                <div class="mt-10">
+                    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center">
+                        <h1 class="color-primary my-0">@Html.PropertyFor(m => m.CurrentContent.RelatedNewsArticleTile)</h1>
+                        <a class="link eyebrow color-primary my-0 mt-2 mt-lg-0" href="@Html.PropertyFor(m => m.ViewAllRelatedArticleLinkPath)" 
+                        title="@Html.PropertyFor(m => m.ViewAllRelatedArticleLinkTitle)">
+                            @Html.PropertyFor(m => m.ViewAllRelatedArticleLinkName)
+                        </a>
+                    </div>  
+                        @Html.PropertyFor(m => m.CurrentContent.RelatedNewsContentArea)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

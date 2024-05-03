@@ -1,0 +1,63 @@
+@using EPiServer.Web.Mvc.Html
+@using NMIC02_DC.Features.Blocks.TrSectionBlock;
+@using NMIC02_DC.Features.Pages.TotalRewards.Compensation;
+
+@model NMIC02_DC.Features.Pages.TotalRewards.Compensation.TrCompensationPageViewModel
+
+<div class="container-fluid">
+    @await Html.PartialAsync("~/Features/Blocks/HeroBlock/HeroBlock.cshtml", Model.Hero)
+</div>
+
+<total-rewards-comp-alert-banner></total-rewards-comp-alert-banner>
+
+<div id="main-content" class="total-rewards container">
+    <div class="row w-100 mx-0">
+
+        <div class="total-rewards__sidebar col-12 col-md-4 col-lg-3 ps-0">
+            @await Component.InvokeAsync("Subnav", Model.CurrentContent)
+        </div>
+
+        <div class="col-12 col-md-8 col-lg-9 px-0">
+            <!-- Campaign Banner --> 
+            @if (Model.CurrentContent.CampaignBanner != null)
+            {                    
+                <div id="campaignBannerHalfWidth">@Html.PropertyFor(x => x.CurrentContent.CampaignBanner)</div>
+            }
+
+            <div class="total-rewards__content-wrapper col-12">
+                <div class="mb-8">
+                    <div class="d-lg-flex align-items-center justify-content-between">
+                        <total-rewards-header 
+                            header-title="@Model.CurrentContent.PageHeader"
+                            header-icon="@Model.PageHeaderImage">
+                        </total-rewards-header>
+                        <total-rewards-comp-blur-toggle cookie-name="hideCompData"></total-rewards-comp-blur-toggle>
+                    </div>
+                    <h1 class="color-primary mt-0 mb-0 mt-4 d-none d-lg-block">@Model.CurrentContent.PageHeader</h1>
+                </div>
+
+                @* TinyMCE content *@
+                <p>@Html.PropertyFor(m => m.CurrentContent.MainBody)</p>
+
+                @* Comp Data Table *@
+                <total-rewards-compensation-table></total-rewards-compensation-table>
+
+                <total-rewards-bar-chart></total-rewards-bar-chart>
+
+                @* Resource Blocks *@
+                @Html.PropertyFor(m => m.CurrentContent.MainContent)
+            </div>
+
+            @if (Model.CurrentContent.Contacts != null)
+            {
+                <section class="total-rewards__contact-block mt-8 mt-lg-10">
+                    <div class="contact-block">
+                        <h2 class="mb-3">Contact</h2>
+                        <div class="contact-block__content-container py-2 px-8 mb-8">
+                            @Html.PropertyFor(x => x.CurrentContent.Contacts)
+                        </div>
+                </section>
+            }
+        </div>
+    </div>
+</div>
