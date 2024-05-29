@@ -1,5 +1,5 @@
 # NM Projects
-This repo contains development work I've worked on.
+This repo contains feature builds I've worked on.
 
 - Image Carousel
 - Commenting Feature
