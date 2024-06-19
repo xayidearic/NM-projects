@@ -7,9 +7,13 @@ import store from '../../store.js';
 import { useGetDashboardDataQuery } from '../../dux/totalRewardsApi.js';
 
 export const ServiceStatus = () => {
-  const { isError } = useGetDashboardDataQuery('totals');
+  const { data, isError, isFetching } = useGetDashboardDataQuery('totals');
 
-  return isError && <ConnectionAlertBanner />;
+  return isFetching ? null : isError ? (
+    <ConnectionAlertBanner textContent="Data is currently unavailable, and a resolution is in progress" />
+  ) : !(data.CompensationTotalSuccess && data.FinancialSecureSuccess && data.HealthcareTotalSuccess) ? (
+    <ConnectionAlertBanner textContent="Some data on this page is currently unavailable. You’ll find more details in the impacted section(s) below." />
+  ) : null;
 };
 
 class BannerAlertClass extends HTMLElement {
