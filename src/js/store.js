@@ -1,20 +1,21 @@
-import { configureStore } from '@reduxjs/toolkit'; 
+import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 import { totalRewardsApi } from './dux/totalRewardsApi.js';
 import commentsApi from './dux/commentsService.js';
-import parameterSliceReducer from './dux/commentsSlice.js';
+import parameterSliceReducer, { parameterSlice } from './dux/commentsSlice.js';
+import hideDataSliceReducer, { hideDataSlice } from './dux/hideDataSlice.js';
 
 /*
  * Central data storage
  */
 const store = configureStore({
-    reducer: {
-        [totalRewardsApi.reducerPath]: totalRewardsApi.reducer,
-        [commentsApi.reducerPath]: commentsApi.reducer,
-        parameters: parameterSliceReducer,
-    },
-    middleware: (getDefaultMiddleware) => 
-        getDefaultMiddleware().concat(totalRewardsApi.middleware, commentsApi.middleware), //intercept action & adds custom logic
+  reducer: {
+    [totalRewardsApi.reducerPath]: totalRewardsApi.reducer,
+    [commentsApi.reducerPath]: commentsApi.reducer,
+    [parameterSlice.name]: parameterSliceReducer,
+    [hideDataSlice.name]: hideDataSliceReducer,
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(totalRewardsApi.middleware, commentsApi.middleware), //intercept action & adds custom logic
 });
 
 setupListeners(store.dispatch);
