@@ -7,6 +7,7 @@ import getCookieValue from '../total-rewards/compensation/getCookieValue.js';
  * API Service - define APIs endpoints, fetch data & manage state datacls
  */
 export const totalRewardsApi = createApi({
+  reducerPath: 'totalRewardsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: '/api/totalrewards',
   }),
@@ -14,9 +15,7 @@ export const totalRewardsApi = createApi({
     getCompensationData: builder.query({
       query: () => '/compensation',
       transformResponse: (response) => {
-        const formattedResponse = formatDataAmounts(formatPercentages(response));
-        let processedResponse = getCookieValue(formattedResponse, 'hideCompData');
-        return processedResponse;
+        return formatDataAmounts(formatPercentages(response));
       },
     }),
     getProjectionsData: builder.query({
@@ -28,26 +27,19 @@ export const totalRewardsApi = createApi({
     getHealthBenefitsData: builder.query({
       query: () => '/benefits',
       transformResponse: (response) => {
-        const formattedHCResponse = formatDataAmounts(response);
-        const processedHCResponse = getCookieValue(formattedHCResponse, 'hideHCData');
-
-        return processedHCResponse;
+        return formatDataAmounts(response);
       },
     }),
     getRetirementData: builder.query({
       query: () => '/retirement',
       transformResponse: (response) => {
-        const formattedResponse = formatDataAmounts(response.data);
-        return formattedResponse;
+        return formatDataAmounts(response.data);
       },
     }),
     getInvestmentsData: builder.query({
       query: () => '/investments',
       transformResponse: (response) => {
-        const formattedFSResponse = formatDataAmounts(response);
-        const processedFSResponse = getCookieValue(formattedFSResponse, 'hideFSData');
-
-        return processedFSResponse;
+        return formatDataAmounts(response);
       },
     }),
     getDeferredData: builder.query({
@@ -56,9 +48,7 @@ export const totalRewardsApi = createApi({
     getDashboardData: builder.query({
       query: () => '/totals',
       transformResponse: (response) => {
-        const formattedDashboardResponse = formatDataAmounts(response);
-        const processedDashboardResponse = getCookieValue(formattedDashboardResponse, 'hideDashboardData');
-        return processedDashboardResponse;
+        return formatDataAmounts(response);
       },
     }),
   }),

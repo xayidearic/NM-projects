@@ -1,24 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    articleId: '',
-    pageTitle: '',
-    orderBy: 0,
-    openModal: false,
-    articleCommentCount: 0,
+  articleId: '',
+  pageTitle: '',
+  orderBy: 0,
+  openModal: false,
+  articleCommentCount: 0,
 };
 
-const parameterSlice = createSlice({
-    name: "parameters",
-    initialState,
-    reducers: {
-        setParams: (state, action) => {
-            return {
-                ...state,
-                ...action.payload,
-            };
-        }
+export const parameterSlice = createSlice({
+  name: 'parameters',
+  initialState,
+  reducers: {
+    setParams: (state, action) => {
+      return {
+        ...state,
+        ...action.payload,
+      };
     },
+  },
 });
 
 export const { setParams } = parameterSlice.actions;
