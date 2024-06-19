@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import AuthoredContentHandler from '../../AuthoredContentHandler.jsx';
 import blur from '../../formatting/blurDataFormat.js';
 import ResourceListLinks from '../ResourceListLinks.jsx';
@@ -56,9 +58,7 @@ const TableConnectionState = ({ data }) => {
  * @returns {JSX.Element} The rendered table.
  */
 const Table = ({ data }) => {
-  const {
-    data: { hideData },
-  } = useGetHealthBenefitsDataQuery('data');
+  const hideHCData = useSelector((state) => state.hideData.hideHCData);
 
   return (
     <div className="total-rewards-table mb-8">
@@ -67,7 +67,7 @@ const Table = ({ data }) => {
           {data ? (
             <tr>
               <td>Company Annual Contributions</td>
-              <td className="text-truncate text-end">{hideData ? blur.amount : getCurrencyFormat(data.EMPLOYER_ANNUAL_CONTRIBUTION)}</td>
+              <td className="text-truncate text-end">{hideHCData ? blur.amount : getCurrencyFormat(data.EMPLOYER_ANNUAL_CONTRIBUTION)}</td>
             </tr>
           ) : null}
         </tbody>

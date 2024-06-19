@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import AuthoredContentHandler from '../../AuthoredContentHandler.jsx';
 import blur from '../../formatting/blurDataFormat.js';
 import ResourceDivider from '../../ResourceDivider.jsx';
@@ -8,45 +10,28 @@ import useFetchData from '../../financial-security/FetchFSData.jsx';
 /**
  *
  * @param {string} title authored title
- * @param {object} investments cookie data
- * @param {object} deferred data
- * @param {boolean} render successful endpoints
  * @returns header title & date
  *
  */
-const SectionTitle = ({ title, investments, deferred, render }) => {
+const SectionTitle = ({ title }) => {
+  const { deferred } = useFetchData();
+  const hideData = useSelector((state) => state.hideData.hideFSData);
+
   return (
     <div className="d-lg-flex flex-column col-12">
       <h2 className="color-primary mb-2">{title}</h2>
-      {render && <div className="metadata mb-1">As of Date: {investments.hideData ? blur.date : deferred[0].BalanceAsofDate}</div>}
+      {deferred && <div className="metadata mb-1">As of Date: {hideData ? blur.date : deferred[0].BalanceAsofDate}</div>}
     </div>
   );
 };
 
 /**
- * @param {object} investments cookie data
- * @param {object} deferred data
- * @param {boolean} render successful endpoints
- * @returns the loading or error state / if successful then the table returns
- */
-const TableConnectionState = ({ deferred, investments, render }) => {
-  if (render) {
-    return <Table deferred={deferred} hideData={investments.hideData} />;
-  } else {
-    return (
-      <div className="neutral-light-gray-bg total-rewards-resource__data col-12">
-        <p className="mb-0 p-12"></p>
-      </div>
-    );
-  }
-};
-
-/**
- * @param {object} deferred data
- * @param {boolean} hideData cookie value
  * @returns Deferred compensation table
  */
-const Table = ({ deferred, hideData }) => {
+const Table = () => {
+  const { deferred } = useFetchData();
+  const hideData = useSelector((state) => state.hideData.hideFSData);
+
   const dollarFormat = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol' });
 
   return (
@@ -83,20 +68,16 @@ const Table = ({ deferred, hideData }) => {
  *
  * @param {object} sectionContent CMS authored connect
  * @returns Deferred compensation Resource section
- * *if no data exists for the employee, do not display the section
+ * Return null if no data or error
  */
 const DeferredCompensation = ({ sectionContent }) => {
-  const { investments, deferred, render } = useFetchData();
+  const { deferred, hasDeferredError } = useFetchData();
 
-  if (deferred && deferred.length === 0) {
-    return null;
-  }
-
-  return (
+  return hasDeferredError || deferred?.length === 0 ? null : (
     <section className="total-rewards-resource mt-lg-11">
       <div className="d-lg-block d-flex flex-column">
-        <SectionTitle title={sectionContent.Title} investments={investments} deferred={deferred} render={render} />
-        <TableConnectionState deferred={deferred} investments={investments} render={render} />
+        <SectionTitle title={sectionContent.Title} />
+        <Table />
         <ResourceListLinks hasResources={sectionContent.HasResources} resourceLinks={sectionContent.ResourceLinks} />
         <AuthoredContentHandler content={sectionContent.SectionBody} />
         <ResourceLogoSection sectionContent={sectionContent} />

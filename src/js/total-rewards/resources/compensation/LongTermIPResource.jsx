@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import ResourceListLinks from '../ResourceListLinks.jsx';
 import AuthoredContentHandler from '../../AuthoredContentHandler.jsx';
@@ -7,30 +7,25 @@ import { getCurrencyFormat } from '../../formatting/formatSalaryAmount.js';
 import { useGetCompensationDataQuery } from '../../../dux/totalRewardsApi.js';
 
 const LongTermIPDataConditional = () => {
-  const { data, isError, isLoading } = useGetCompensationDataQuery('data');
+  const { isError, isLoading } = useGetCompensationDataQuery('data');
 
-  if (isLoading || isError) {
-    return (
-      <div className={`${isLoading ? 'neutral-light-gray-bg' : 'neutral-cloud-bg'} total-rewards-resource__data p-4 mb-4`}>
-        <p className="mb-0 p-12"></p>
-      </div>
-    );
-  }
-
-  return data ? <OutstandingGrantsTable data={data} /> : null;
+  return isLoading || isError ? (
+    <div className={`${isLoading ? 'neutral-light-gray-bg' : 'neutral-cloud-bg'} total-rewards-resource__data p-4 mb-4`}>
+      <p className="mb-0 p-12"></p>
+    </div>
+  ) : (
+    <OutstandingGrantsTable />
+  );
 };
 
-const OutstandingGrantsTable = ({ data }) => {
-  const [totalGrant, setTotalGrant] = useState(getCurrencyFormat(0));
+const OutstandingGrantsTable = () => {
+  const { data } = useGetCompensationDataQuery('data');
+  const { formattedAmount } = data || {};
+  const { Future_LTI_Grant_Amt, Future_LTI_Amt_1_Year, Future_LTI_Amt_2_Years, Future_LTI_Amt_3_Years } = formattedAmount || {};
+  const grantSum = data?.Future_LTI_Grant_Amt + data?.Future_LTI_Amt_1_Year + data?.Future_LTI_Amt_2_Years + data?.Future_LTI_Amt_3_Years;
+  const grantTotal = getCurrencyFormat(grantSum) || '$0.00';
+  const hideData = useSelector((state) => state.hideData.hideCompData);
   const currentYear = new Date().getFullYear();
-
-  useEffect(() => {
-    if (data) {
-      const totalLongTermGrant = data.Future_LTI_Grant_Amt + data.Future_LTI_Amt_1_Year + data.Future_LTI_Amt_2_Years + data.Future_LTI_Amt_3_Years;
-
-      setTotalGrant(getCurrencyFormat(totalLongTermGrant));
-    }
-  }, [data]);
 
   return (
     <div className="total-rewards-table mb-8">
@@ -48,30 +43,30 @@ const OutstandingGrantsTable = ({ data }) => {
           {data.Future_LTI_Grant_Amt ? (
             <tr>
               <td>{currentYear} Long-term Incentive</td>
-              <td className="text-truncate text-end">{data.hideData ? blur.amount : data.formattedAmount.Future_LTI_Grant_Amt}</td>
+              <td className="text-truncate text-end">{hideData ? blur.amount : Future_LTI_Grant_Amt}</td>
             </tr>
           ) : null}
           {data.Future_LTI_Amt_1_Year ? (
             <tr>
               <td>{currentYear - 1} Long-term Incentive</td>
-              <td className="text-truncate text-end">{data.hideData ? blur.amount : data.formattedAmount.Future_LTI_Amt_1_Year}</td>
+              <td className="text-truncate text-end">{hideData ? blur.amount : Future_LTI_Amt_1_Year}</td>
             </tr>
           ) : null}
           {data.Future_LTI_Amt_2_Years ? (
             <tr>
               <td>{currentYear - 2} Long-term Incentive</td>
-              <td className="text-truncate text-end">{data.hideData ? blur.amount : data.formattedAmount.Future_LTI_Amt_2_Years}</td>
+              <td className="text-truncate text-end">{hideData ? blur.amount : Future_LTI_Amt_2_Years}</td>
             </tr>
           ) : null}
           {data.Future_LTI_Amt_3_Years ? (
             <tr>
               <td>{currentYear - 3} Long-term Incentive</td>
-              <td className="text-truncate text-end">{data.hideData ? blur.amount : data.formattedAmount.Future_LTI_Amt_3_Years}</td>
+              <td className="text-truncate text-end">{hideData ? blur.amount : Future_LTI_Amt_3_Years}</td>
             </tr>
           ) : null}
           <tr>
             <td>Total Outstanding Long-term Grants</td>
-            <td className="text-truncate text-end">{data.hideData ? blur.amount : totalGrant}</td>
+            <td className="text-truncate text-end">{hideData ? blur.amount : grantTotal}</td>
           </tr>
         </tbody>
       </table>
@@ -81,11 +76,8 @@ const OutstandingGrantsTable = ({ data }) => {
 
 const LongTermIPResource = ({ sectionContent }) => {
   const { data } = useGetCompensationDataQuery('data');
-  if (data && !data.Future_LTI_Grant_Amt && !data.Future_LTI_Amt_1_Year && !data.Future_LTI_Amt_2_Years && !data.Future_LTI_Amt_3_Years) {
-    return null;
-  }
 
-  return (
+  return data && data.Future_LTI_Grant_Amt && data.Future_LTI_Amt_1_Year && data.Future_LTI_Amt_2_Years && data.Future_LTI_Amt_3_Years ? (
     <section className="total-rewards-resource">
       <h2 className="color-primary">{sectionContent.Title}</h2>
       <div className="d-lg-block d-flex flex-column">
@@ -96,7 +88,7 @@ const LongTermIPResource = ({ sectionContent }) => {
         <AuthoredContentHandler content={sectionContent.SectionBody} />
       </div>
     </section>
-  );
+  ) : null;
 };
 
 export default LongTermIPResource;

@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import AuthoredContentHandler from '../../AuthoredContentHandler.jsx';
 import blur from '../../formatting/blurDataFormat.js';
 import ResourceListLinks from '../ResourceListLinks.jsx';
@@ -56,9 +58,7 @@ const TableConnectionState = ({ flexSpendingData, dependantFlexSpendingData }) =
  * @param {Object} props.dependantFlexSpendingData - Dependant flex spending data.
  */
 const Table = ({ flexSpendingData, dependantFlexSpendingData }) => {
-  const {
-    data: { hideData },
-  } = useGetHealthBenefitsDataQuery('data');
+  const hideHCData = useSelector((state) => state.hideData.hideHCData);
 
   return (
     <div className="total-rewards-table mb-8">
@@ -79,13 +79,13 @@ const Table = ({ flexSpendingData, dependantFlexSpendingData }) => {
                   </Tooltip>
                 </div>
               </td>
-              <td className="text-truncate text-end">{hideData ? blur.amount : getCurrencyFormat(flexSpendingData.VOLUME)}</td>
+              <td className="text-truncate text-end">{hideHCData ? blur.amount : getCurrencyFormat(flexSpendingData.VOLUME)}</td>
             </tr>
           ) : null}
           {dependantFlexSpendingData ? (
             <tr>
               <td>Dependant Care FSA</td>
-              <td className="text-truncate text-end">{hideData ? blur.amount : getCurrencyFormat(dependantFlexSpendingData.VOLUME)}</td>
+              <td className="text-truncate text-end">{hideHCData ? blur.amount : getCurrencyFormat(dependantFlexSpendingData.VOLUME)}</td>
             </tr>
           ) : null}
         </tbody>

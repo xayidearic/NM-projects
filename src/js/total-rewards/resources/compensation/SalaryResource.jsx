@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import AuthoredContentHandler from '../../AuthoredContentHandler.jsx';
 import blur from '../../formatting/blurDataFormat.js';
 import { useGetCompensationDataQuery } from '../../../dux/totalRewardsApi.js';
@@ -6,26 +8,19 @@ import ResourceDivider from '../../ResourceDivider.jsx';
 
 const SalaryDataConditional = () => {
   const { data, isError, isLoading } = useGetCompensationDataQuery('data');
+  const hideData = useSelector((state) => state.hideData.hideCompData);
 
-  if (isError || isLoading) {
-    // Render empty neutral light gray box
-    return (
-      <div
-        className={`total-rewards-resource__data col-lg-4 p-4 mb-4 ${isLoading ? 'neutral-light-gray-bg' : 'neutral-cloud-bg'}`}
-        role="progressbar"
-      >
-        <p className="mb-0 p-2"></p>
-      </div>
-    );
-  }
-
-  return data ? (
+  return isError || isLoading ? (
+    <div className={`total-rewards-resource__data col-lg-4 p-4 mb-4 ${isLoading ? 'neutral-light-gray-bg' : 'neutral-cloud-bg'}`} role="progressbar">
+      <p className="mb-0 p-2"></p>
+    </div>
+  ) : (
     <div className="total-rewards-resource__data neutral-light-gray-bg p-4 display-inline-block mb-4">
       <p className="mb-0">
-        Base Pay: <span className="weight-500 color-primary">{data.hideData ? blur.amount : data.formattedAmount.Salary}</span>
+        Base Pay: <span className="weight-500 color-primary">{hideData ? blur.amount : data.formattedAmount.Salary}</span>
       </p>
     </div>
-  ) : null;
+  );
 };
 
 /**
