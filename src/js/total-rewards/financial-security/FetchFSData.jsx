@@ -10,7 +10,9 @@ import {
 /**
  * Custom hook that encapsulates the endpoint hooks and makes it reusable
  * @returns object containing the data from each query
- * Track data & error
+ * if Projections fails, so does Retirement
+ * Benefits and Deferred are not required during loading
+ * isError is used to determine if the Main yellow banner should be displayed
  */
 function useFetchData() {
   const benefitsQuery = useGetHealthBenefitsDataQuery('benefitfocus');
@@ -21,13 +23,21 @@ function useFetchData() {
   const projectionsQuery = useGetProjectionsDataQuery('calculations');
 
   return {
-    benefits: benefitsQuery.data,
+    hasInvestmentsLoading: investmentsQuery.isLoading,
     investments: investmentsQuery.data,
+    hasInvestmentsError: investmentsQuery.isError,
     retirement: retirementQuery.data,
-    comp: compQuery.data,
-    deferred: deferredQuery.data,
+    hasRetirementLoading: retirementQuery.isLoading,
+    hasRetirementError: retirementQuery.isError,
+    hasBenefitsError: benefitsQuery.isError || benefitsQuery.isLoading,
     projections: projectionsQuery.data,
-    render: benefitsQuery.data && investmentsQuery.data && retirementQuery.data && compQuery.data && deferredQuery.data && projectionsQuery.data,
+    hasProjectionsError: retirementQuery.isError || projectionsQuery.isError || compQuery.isError,
+    hasProjectionLoading: retirementQuery.isLoading || projectionsQuery.isLoading || compQuery.isLoading,
+    benefits: benefitsQuery.data,
+    comp: compQuery.data,
+    hasCompError: compQuery.isError,
+    deferred: deferredQuery.data,
+    hasDeferredError: deferredQuery.isError || deferredQuery.isLoading,
     isError:
       benefitsQuery.isError ||
       investmentsQuery.isError ||
