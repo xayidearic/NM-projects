@@ -2,6 +2,7 @@ import Tooltip from '../../../components/Tooltip.jsx';
 import blur from '../../formatting/blurDataFormat';
 import { getCurrencyFormat } from '../../formatting/formatSalaryAmount.js';
 import { PLAN_TYPES } from '../../constants/health-page.js';
+import { useSelector } from 'react-redux';
 
 /**
  * HealthPlanDescription Component displays the description of health plans.
@@ -12,11 +13,11 @@ import { PLAN_TYPES } from '../../constants/health-page.js';
  * @param {string} props.benefitData.PLAN_NAME - Name of the plan.
  * @param {number} props.benefitData.EMPLOYEE_MONTHLY_COST - Monthly cost for the employee.
  * @param {number} props.benefitData.CREDIT_AMOUNT - Credit amount the user has earned.
- * @param {boolean} props.hideData - Flag to determine if the data should be hidden.
  *
  * @returns {React.Element}
  */
-const HealthPlanDescription = ({ benefitType, benefitData, hideData }) => {
+const HealthPlanDescription = ({ benefitType, benefitData }) => {
+  const hideHCData = useSelector((state) => state.hideData.hideHCData);
   const hasEmployeeMonthlyCost = benefitData.EMPLOYEE_MONTHLY_COST !== 0;
 
   /**
@@ -75,11 +76,10 @@ const HealthPlanDescription = ({ benefitType, benefitData, hideData }) => {
     <div className="mb-4 d-flex">
       <p className="metadata mb-0">
         You've earned{' '}
-        <span className="color-primary weight-brand-bold">{hideData ? blur.amountSmall : getCurrencyFormat(benefitData.CREDIT_AMOUNT)} OFF</span> your
-        monthly premium by meeting your wellness incentives.
+        <span className="color-primary weight-brand-bold">{hideHCData ? blur.amountSmall : getCurrencyFormat(benefitData.CREDIT_AMOUNT)} OFF</span>{' '}
+        your monthly premium by meeting your wellness incentives.
       </p>
-      <Tooltip targetClass={'position-relative mt-1 mt-lg-2'}
-        targetContent={'tool-tip__content--credit-amount'}>
+      <Tooltip targetClass={'position-relative mt-1 mt-lg-2'} targetContent={'tool-tip__content--credit-amount'}>
         You and your spouse or domestic partner can each earn up to $1600 annually ($133.33/mo.) in wellness rewards by participating in Well360
         activities. Wellness rewards earned offset the costs of enrolling in your health plan in the following year.
       </Tooltip>
