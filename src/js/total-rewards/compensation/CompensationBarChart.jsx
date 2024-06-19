@@ -1,6 +1,6 @@
 import { useState, useLayoutEffect, useRef, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, ReferenceLine, LabelList } from 'recharts';
 
 import { registerCustomElement } from '../../app/registerCustomElement.js';
@@ -113,6 +113,7 @@ export const StackedBarChart = () => {
   const [tooltipVisible, setTooltipVisible] = useState(true);
   const [compensationData, setCompensationData] = useState([]);
   const [legendHeight, setLegendHeight] = useState(40);
+  const hideData = useSelector((state) => state.hideData.hideCompData);
 
   const updateLegendHeight = () => {
     if (window.innerWidth <= 412) {
@@ -291,7 +292,7 @@ export const StackedBarChart = () => {
         <div className={`chart-container ${isLoading || isError ? 'chart-container--hidden' : ''}`}>
           {!isLoading || !isError ? (
             <BarChart
-              className={`chart-content ${data.hideData ? 'hidden-bar-chart' : ''}`}
+              className={`chart-content ${hideData ? 'hidden-bar-chart' : ''}`}
               width={chartWidth}
               height={521}
               data={compensationData}
@@ -317,7 +318,7 @@ export const StackedBarChart = () => {
 
               <YAxis tick={false} tickLine={false} domain={[0, maxYValue]} ticks={yAxisTicks} axisLine={{ stroke: '#D4D4D4' }} />
 
-              {!data.hideData && (
+              {!hideData && (
                 <Tooltip
                   cursor={false}
                   content={<CustomTooltip data={compensationData} tooltipVisible={tooltipVisible} x={tooltipPosition[currentHoveredIndex]?.x} />}

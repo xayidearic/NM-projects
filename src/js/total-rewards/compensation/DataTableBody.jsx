@@ -1,21 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import blur from '../formatting/blurDataFormat.js';
 import handleSectionScroll from '../scrollToSection.js';
 import jobLevels from '../qualifyingLTIPJobLevels.js';
 import { useGetCompensationDataQuery } from '../../dux/totalRewardsApi.js';
+import { getCurrencyFormat } from '../formatting/formatSalaryAmount.js';
 
-const BaseSalaryRow = ({ salary, hideData }) => {
+const BaseSalaryRow = () => {
+  const { data } = useGetCompensationDataQuery('data');
+  const { Salary } = data?.formattedAmount || {};
+  const hideData = useSelector((state) => state.hideData.hideCompData);
+
   return (
     <tr className="hover" onClick={() => handleSectionScroll('AS')}>
       <td>Base Pay</td>
       <td></td>
-      <td className="text-truncate text-end">{hideData ? blur.amount : salary}</td>
+      <td className="text-truncate text-end">{hideData ? blur.amount : Salary}</td>
     </tr>
   );
 };
 
-const AnnualIncentiveRow = ({ Target_AI_Percent, Target_AI_Amt, hideData }) => {
+const AnnualIncentiveRow = () => {
+  const { data } = useGetCompensationDataQuery('data');
+  const { Target_AI_Amt } = data?.formattedAmount || {};
+  const { Target_AI_Percent } = data?.formattedPercentage || {};
+  const hideData = useSelector((state) => state.hideData.hideCompData);
+
   return (
     <tr className="hover" onClick={() => handleSectionScroll('AIP')}>
       <td>Target Annual Incentive Plan</td>
@@ -25,7 +35,12 @@ const AnnualIncentiveRow = ({ Target_AI_Percent, Target_AI_Amt, hideData }) => {
   );
 };
 
-const LongTermIncentiveRow = ({ data, LTI_Amt_Target_Pct, LTI_Amt_Target_Amt, hideData }) => {
+const LongTermIncentiveRow = () => {
+  const { data } = useGetCompensationDataQuery('data');
+  const { LTI_Amt_Target_Amt } = data?.formattedAmount || {};
+  const { LTI_Amt_Target_Pct } = data?.formattedPercentage || {};
+  const hideData = useSelector((state) => state.hideData.hideCompData);
+
   return jobLevels.includes(data.Job_Level) ? (
     <tr className="hover" onClick={() => handleSectionScroll('LTIP')}>
       <td>Target Long-term Incentive Plan</td>
@@ -38,47 +53,30 @@ const LongTermIncentiveRow = ({ data, LTI_Amt_Target_Pct, LTI_Amt_Target_Amt, hi
   ) : null;
 };
 
-const TotalCompensation = ({ data }) => {
-  const [totalCompensation, setTotalCompensation] = useState(null);
-  const hasLTIP = jobLevels.includes(data.Job_Level);
-
-  useEffect(() => {
-    if (data) {
-      const totalComp = hasLTIP ? data.Salary + data.Target_AI_Amt + data.LTI_Amt_Target_Amt : data.Salary + data.Target_AI_Amt;
-
-      setTotalCompensation(new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol' }).format(totalComp));
-    }
-  }, [data, hasLTIP]);
+const TotalCompensation = () => {
+  const { data } = useGetCompensationDataQuery('data');
+  const { Salary, Target_AI_Amt, LTI_Amt_Target_Amt, Job_Level } = data || {};
+  const hasLTIP = jobLevels.includes(Job_Level);
+  const totalComp = hasLTIP ? Salary + Target_AI_Amt + LTI_Amt_Target_Amt : Salary + Target_AI_Amt;
+  const totalCompensation = getCurrencyFormat(totalComp);
+  const hideData = useSelector((state) => state.hideData.hideCompData);
 
   return (
     <tr>
       <td colSpan={2}>Target Total Compensation</td>
-      <td className="text-end text-truncate">{data.hideData ? blur.sumTotal : totalCompensation}</td>
+      <td className="text-end text-truncate">{hideData ? blur.sumTotal : totalCompensation}</td>
     </tr>
   );
 };
 
 const DataTableBody = () => {
-  const { data } = useGetCompensationDataQuery('data');
-
   return (
-    data && (
-      <tbody>
-        <BaseSalaryRow salary={data.formattedAmount.Salary} hideData={data.hideData} />
-        <AnnualIncentiveRow
-          Target_AI_Percent={data.formattedPercentage.Target_AI_Percent}
-          Target_AI_Amt={data.formattedAmount.Target_AI_Amt}
-          hideData={data.hideData}
-        />
-        <LongTermIncentiveRow
-          data={data}
-          LTI_Amt_Target_Pct={data.formattedPercentage.LTI_Amt_Target_Pct}
-          LTI_Amt_Target_Amt={data.formattedAmount.LTI_Amt_Target_Amt}
-          hideData={data.hideData}
-        />
-        <TotalCompensation data={data} />
-      </tbody>
-    )
+    <tbody>
+      <BaseSalaryRow />
+      <AnnualIncentiveRow />
+      <LongTermIncentiveRow />
+      <TotalCompensation />
+    </tbody>
   );
 };
 
