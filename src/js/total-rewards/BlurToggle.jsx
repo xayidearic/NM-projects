@@ -1,6 +1,11 @@
 ﻿import { useState } from 'react';
+import { Provider, useDispatch } from 'react-redux';
+import { createRoot } from 'react-dom/client';
 
 import { CookieManager } from '../app/cookieManager.js';
+import { setHideData } from '../dux/hideDataSlice.js';
+import store from '../store.js';
+import { registerCustomElement } from '../app/registerCustomElement.js';
 
 /**
  * Get toggled from cookie
@@ -24,24 +29,20 @@ export const GetBlurChoices = (name) => {
  *   the slide state & setter come from slides parent component
  *   updates to the state will update the other toggles within landing page
  */
-export const BlurToggle = ({ cookName, refetch, landingPage, blurSlide, setBlurSlide }) => {
+export const BlurToggle = ({ cookName, landingPage, blurSlide, setBlurSlide }) => {
   const [isBlurred, setIsBlurred] = useState(GetBlurChoices(cookName));
+  const dispatch = useDispatch();
 
   const landingPageToggle = () => {
     setBlurSlide(!blurSlide);
     CookieManager.setCookie(cookName, !blurSlide);
-    if (refetch) {
-      refetch();
-    }
+    dispatch(setHideData({ [cookName]: !blurSlide }));
   };
 
   const pageToggle = () => {
     setIsBlurred(!isBlurred);
-
     CookieManager.setCookie(cookName, !isBlurred);
-    if (refetch) {
-      refetch();
-    }
+    dispatch(setHideData({ [cookName]: !isBlurred }));
   };
 
   return (
@@ -69,9 +70,7 @@ export const BlurToggle = ({ cookName, refetch, landingPage, blurSlide, setBlurS
           type="checkbox"
           onClick={landingPageToggle}
           tabIndex="-1"
-          className={blurSlide ?
-            'blur-toggle__blur-checkbox' :
-            'blur-toggle__blur-checkbox blur-toggle__blur-checkbox--selected'}
+          className={blurSlide ? 'blur-toggle__blur-checkbox' : 'blur-toggle__blur-checkbox blur-toggle__blur-checkbox--selected'}
           aria-invalid="false"
         />
       ) : (
@@ -80,9 +79,7 @@ export const BlurToggle = ({ cookName, refetch, landingPage, blurSlide, setBlurS
           type="checkbox"
           onClick={pageToggle}
           tabIndex="-1"
-          className={isBlurred ?
-            'blur-toggle__blur-checkbox' :
-            'blur-toggle__blur-checkbox blur-toggle__blur-checkbox--selected'}
+          className={isBlurred ? 'blur-toggle__blur-checkbox' : 'blur-toggle__blur-checkbox blur-toggle__blur-checkbox--selected'}
           aria-invalid="false"
         />
       )}
@@ -111,3 +108,17 @@ export const BlurToggle = ({ cookName, refetch, landingPage, blurSlide, setBlurS
     </div>
   );
 };
+
+class BlurToggleClass extends HTMLElement {
+  connectedCallback() {
+    const root = createRoot(this);
+
+    root.render(
+      <Provider store={store}>
+        <BlurToggle cookName={this.getAttribute('cookie-name')} />
+      </Provider>
+    );
+  }
+}
+
+registerCustomElement('total-rewards-blur-toggle', BlurToggleClass);
