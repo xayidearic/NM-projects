@@ -1,0 +1,49 @@
+.localTime {
+    font-size: 1.9rem;
+    width: 100%;
+
+    @include media-breakpoint-down(md) {
+        flex-direction: column;
+    }
+
+    @include media-breakpoint-down(sm) {
+        display: flex;
+        flex-flow: column;
+        text-align: center;
+    }
+
+    span:first-child {
+        color: $neutral_dark-gray;
+        flex: 0 0 84px;
+        font-size: 1.9rem;
+
+        @include media-breakpoint-down(lg) {
+            font-size: 1.4rem;
+        }
+
+        @include media-breakpoint-down(md) {
+            flex: 0 1 auto;
+            font-size: 1.5rem;
+        }
+
+        @include media-breakpoint-down(sm) {
+            margin-bottom: 0.8rem;
+            font-size: 1.5rem;
+        }
+    }
+}
+
+.realTime {
+    background: $neutral_cloud;
+    padding: 0.8rem 1.6rem;
+    margin-left: 2.4rem;
+    color: $neutral_dark-gray;
+    font-weight: $normal-font-weight;
+    border-radius: 0.4rem;
+    font-size: 1.9rem;
+
+    @include media-breakpoint-down(md) {
+        margin-left: 1rem;
+        flex: 0 1 auto;
+    }
+}

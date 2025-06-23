@@ -1,0 +1,27 @@
+.showMore {
+    color: $button_blue-enabled;
+    font-size: 1.7rem;
+    margin-top: 1.6rem;
+    display: flex;
+    font-weight: 400;
+    align-items: center;
+
+    &:hover {
+        font-weight: 500;
+    }
+}
+
+.skillItem {
+    background-color: $neutral_cloud;
+    padding: 0.8rem 1.6rem;
+    margin-top: 1.6rem;
+    border-radius: 0.4rem;
+
+    &:not(:last-child) {
+        margin-right: 1.6rem;
+    }
+
+    p {
+        @include p1-font-style();
+    }
+}

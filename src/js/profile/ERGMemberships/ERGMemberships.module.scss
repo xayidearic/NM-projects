@@ -1,0 +1,55 @@
+.ergMembership {
+    &:hover {
+            & > div {
+                border-color: $button_blue-enabled;
+                box-shadow: $border-radius-color;
+            }
+        }
+
+        &:focus-visible {
+            outline: none;
+
+            & > div {
+                outline: 0.1rem solid $button_blue-hover;
+                outline-offset: 0.4rem;
+                border-radius: 0.3rem;
+            }
+        }
+
+        & > div {
+            border: 0.115rem solid $system_disabled-gray;
+            padding: 1.6rem 2.6rem 1.6rem 1.6rem;
+            border-radius: 0.4rem;
+
+            @include media-breakpoint-between(md, lg) {
+                padding: 0.8rem;
+            }
+        }
+
+        a {
+            width: fit-content;
+        }
+}
+
+.name {
+    line-height: 2.2rem;
+}
+
+.icon {
+    width: 8rem;
+    height: 8rem;
+
+    @include media-breakpoint-down(lg) {
+        width: 3.7rem;
+        height: 3.7rem;
+    }
+
+    @include media-breakpoint-down(md) {
+        width: 7.2rem;
+        height: 7.2rem;
+    }
+
+    img {
+        width: 100%;
+    }
+}

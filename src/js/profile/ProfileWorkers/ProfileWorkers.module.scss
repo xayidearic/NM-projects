@@ -1,0 +1,129 @@
+.noCoworkers {
+    display: flex;
+    padding: 1.1rem;
+    background-color: $neutral_light-gray;
+    align-items: center;
+    width: 100%;
+
+    div {
+        margin-right: 1rem;
+    }
+}
+
+.container {
+    height: fit-content;
+    border: 0.1rem solid $system_disabled-gray;
+    border-radius: 0.4rem;
+    padding: 1.6rem 1.95rem;
+    justify-content: center;
+    align-items: center;
+
+    > h4 {
+        margin-bottom: 0.8rem;
+
+        @include media-breakpoint-between(md, lg) {
+            margin-bottom: 0.4rem;
+            font-size: 1.7rem;
+        }
+
+        @include media-breakpoint-down(md) {
+            font-size: 2.1rem;
+        }
+    }
+
+    a {
+        font-weight: 500;
+        font-size: 1.9rem;
+        letter-spacing: 0.1rem;
+        color: $neutral_dark-gray;
+
+        @include media-breakpoint-between(md, lg) {
+            font-size: 1.4rem;
+        }
+
+        @include media-breakpoint-down(md) {
+            font-size: 1.7rem;
+        }
+    }
+
+    @include media-breakpoint-between(md, lg) {
+        padding: 1.6rem;
+    }
+
+    @include media-breakpoint-down(md) {
+        padding: 2.4rem 4rem;
+    }
+}
+
+.coworkers {
+    padding-left: 0.5rem;
+    height: 24.6rem;
+    overflow-y: scroll;
+    padding-right: 1rem;
+
+    .resultListItem {
+        padding: 1.9rem 0;
+        display: flex;
+        border-bottom: 0.15rem solid $neutral_cloud;
+
+        &:hover,
+        &:active {
+            background-color: $neutral_light-gray;
+        }
+
+        &:hover,
+        &:focus {
+            div > a {
+                color: $button_blue-enabled;
+            }
+        }
+
+        &:active {
+            div > a {
+                color: $brand_blue-primary;
+            }
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        @include media-breakpoint-between(md, lg) {
+            padding: 0.8rem 0;
+        }
+
+        @include media-breakpoint-down(md) {
+            padding: 1.1rem 0;
+        }
+    }
+
+    @include media-breakpoint-between(md, lg) {
+        height: 16.6rem;
+    }
+
+    @include media-breakpoint-down(md) {
+        height: 21rem;
+    }
+}
+
+.fullHeightCoworkers {
+    height: 62.6rem !important;
+
+    @include media-breakpoint-down(lg) {
+        height: 38.4rem !important;
+    }
+
+    @include media-breakpoint-down(md) {
+        height: 29.4rem !important;
+    }
+}
+
+.brandLoader {
+    border: 1rem solid #f3f3f3;
+    border-top: 1rem solid #1570bc;
+    border-radius: 50%;
+    width: 8rem;
+    height: 8rem;
+    animation: spin 2s linear infinite;
+    position: absolute;
+}

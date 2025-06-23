@@ -1,0 +1,25 @@
+.banner {
+    background-image: url("/Content/Images/layout/banner_background.png");
+    padding: 4.8rem 2rem 5.2rem;
+
+    p,
+    h1 {
+        color: $neutral_white;
+    }
+
+    .title {
+        font-size: 4rem;
+        font-family: Tandelle, Guardian-Sans, 'Helvetica Neue', Helvetica, sans-serif;
+        letter-spacing: 0.4rem;
+        font-weight: $semibold-font-weight;
+        text-transform: uppercase;
+
+        @include media-breakpoint-up(md) {
+            font-size: 4.8rem;
+        }
+
+        @include media-breakpoint-up(lg) {
+            font-size: 7.2rem;
+        }
+    }
+}

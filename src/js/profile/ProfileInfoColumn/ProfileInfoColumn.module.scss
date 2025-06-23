@@ -1,0 +1,86 @@
+.rightCol {
+    ul {
+        li {
+            color: $neutral_dark-gray;
+            margin-bottom: 0.8rem;
+
+            p,
+            a {
+                font-size: 1.6rem;
+
+                @include media-breakpoint-down(lg) {
+                    font-size: 1.4rem;
+                }
+            }
+
+            p {
+                &:first-child {
+                    font-weight: 400;
+
+                    @include media-breakpoint-down(md) {
+                        margin-right: 2rem;
+                    }
+                }
+            }
+        }
+    }
+
+    .info {
+        margin-bottom: 2.4rem;
+        padding: 4.8rem 4.2rem 6.4rem;
+        background-color: $neutral_white;
+        border-radius: 0.2rem;
+
+        @media only screen and (max-width: 1440px) {
+            padding: 4.8rem 1.2rem 6.4rem;
+        }
+
+        @media only screen and (max-width: 1024px) {
+            padding: 2.4rem 1.9rem 3.4rem;
+            margin-bottom: 3.2rem;
+        }
+
+        @media only screen and (max-width: 768px) {
+            padding: 3.2rem 1.2rem 3.4rem;
+        }
+    }
+}
+
+.editBtn {
+    margin-top: 2.8rem;
+    width: 23rem;
+
+    @include media-breakpoint-between(md, lg) {
+        margin-top: 0.4rem;
+        width: 13rem;
+    }
+}
+
+.employeeName {
+    @include header-type(h1);
+
+    @include media-breakpoint-between(md, lg) {
+        font-size: 2.1rem;
+    }
+}
+
+.employeeTitle {
+    font-size: 2.4rem;
+    line-height: 2.9rem;
+
+    @include media-breakpoint-down(lg) {
+        font-size: 1.4rem;
+        line-height: 1.7rem;
+    }
+
+    @include media-breakpoint-down(md) {
+        font-size: 1.9rem;
+        line-height: 2.3rem;
+    }
+}
+
+.divider {
+    background-color: $neutral_cloud;
+    width: 100%;
+    height: .15rem;
+}
