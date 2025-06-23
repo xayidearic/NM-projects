@@ -1,0 +1,28 @@
+.scrollable {
+    max-height: 74rem;
+    overflow-y: auto;
+
+    /* scrollbar */
+    &::-webkit-scrollbar {
+        width: 0.8rem;
+    }
+    /* Track */
+    &::-webkit-scrollbar-track {
+        border-radius: 8rem;
+        background: $neutral_cloud;
+    }
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        border-radius: 8rem;
+        background: $system_disabled-gray;
+    }
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: $neutral_dark-gray;
+        height: 1rem;
+    }
+}
+
+.event {
+    border-bottom: 0.1rem solid $neutral_cloud;
+}
