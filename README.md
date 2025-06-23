@@ -1,6 +1,7 @@
 # NM Projects
 This repo contains feature builds I've worked on.
 
+- Profile page (typescript, react, redux, unit tested)
 - Image Carousel (typescript + unit test)
 - Commenting Feature (react)
 - Personalized banner (react)
